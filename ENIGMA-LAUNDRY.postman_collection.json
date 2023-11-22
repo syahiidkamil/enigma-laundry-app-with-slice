@@ -1,0 +1,695 @@
+{
+	"info": {
+		"_postman_id": "bdba0abe-282d-42d5-b8a2-bfc3514a970c",
+		"name": "ENIGMA-LAUNDRY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11837786"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Dinda Aditiya\",\n    \"email\": \"dinda.aditiya@gmail.com\",\n    \"username\": \"dinda.aditiya\",\n    \"password\": \"password\",\n    \"role\": \"employee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/auth/register",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = JSON.parse(responseBody)",
+									"",
+									"if (response && response.data.token) {",
+									"    pm.globals.set(\"enigma_laundry_token\", response.data.token)",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"employee\",\n    \"password\":\"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/auth/login",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbmlnbWFjYW1wIiwiZXhwIjoxNjk5NDI4MTYzLCJpYXQiOjE2OTk0MjQ1NjMsInVzZXJJZCI6IjdlODA5N2Q4LWZlZjEtNDllZC05ZjdiLWNlY2M5NTIwY2NhOCIsInJvbGUiOiJlbXBsb3llZSIsInNlcnZpY2VzIjpudWxsfQ.E_EXyr3LjXVake61dvDb2jUAUnt_d805kstKZl9GiEg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/auth/refresh-token",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USER",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/users",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/users/13a0c6f8-184c-4f5f-b308-ad749df24376",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"users",
+								"13a0c6f8-184c-4f5f-b308-ad749df24376"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/users/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"users",
+								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/users",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/users",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PRODUCT",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/products",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/products/13a0c6f8-184c-4f5f-b308-ad749df24376",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"products",
+								"13a0c6f8-184c-4f5f-b308-ad749df24376"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/products/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"products",
+								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/products",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/products",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CUSTOMER",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/customers",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/customers/26bc3081-4b22-4c6d-a7f4-d34d10c7ca7d",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"customers",
+								"26bc3081-4b22-4c6d-a7f4-d34d10c7ca7d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/customers/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"customers",
+								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Joko Wi\",\n    \"phoneNumber\": \"028292992\",\n    \"address\": \"Bogor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/customers/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"customers",
+								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Joko Wi\",\n    \"phoneNumber\": \"828292992\",\n    \"address\": \"Bogor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/customers",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BILL",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": \"b32eed7d-052a-4711-bcad-0bc577654883\",\n    \"billDetails\": [\n        {\n            \"product\": {\n                \"id\": \"58e0c367-af5e-4b9e-ae56-75f3b53a0096\"\n            },\n            \"qty\": 11\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/bills",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"bills"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/bills/9a5d29c7-0cec-47e3-923f-3ad58fc6ab75",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"bills",
+								"9a5d29c7-0cec-47e3-923f-3ad58fc6ab75"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{enigma_laundry_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_PATH}}/bills",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"bills"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
