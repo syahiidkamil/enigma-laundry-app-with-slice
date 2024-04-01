@@ -10,13 +10,13 @@
 			"name": "AUTH",
 			"item": [
 				{
-					"name": "register",
+					"name": "employee-register",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Dinda Aditiya\",\n    \"email\": \"dinda.aditiya@gmail.com\",\n    \"username\": \"dinda.aditiya\",\n    \"password\": \"password\",\n    \"role\": \"employee\"\n}",
+							"raw": "{\n    \"name\": \"{{EMPLOYEE_NAME}}\",\n    \"email\": \"{{EMPLOYEE_EMAIL}}\",\n    \"username\": \"{{EMPLOYEE_USERNAME}}\",\n    \"password\": \"{{EMPLOYEE_PASSWORD}}\",\n    \"role\": \"{{EMPLOYEE_ROLE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -37,7 +37,7 @@
 					"response": []
 				},
 				{
-					"name": "login",
+					"name": "employee-login",
 					"event": [
 						{
 							"listen": "test",
@@ -49,7 +49,8 @@
 									"    pm.globals.set(\"enigma_laundry_token\", response.data.token)",
 									"}"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -58,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"employee\",\n    \"password\":\"password\"\n}",
+							"raw": "{\n    \"username\": \"{{EMPLOYEE_USERNAME}}\",\n    \"password\": \"{{EMPLOYEE_PASSWORD}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -79,28 +80,86 @@
 					"response": []
 				},
 				{
-					"name": "refresh-token",
+					"name": "existing-employee-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = JSON.parse(responseBody)",
+									"",
+									"if (response && response.data.token) {",
+									"    pm.globals.set(\"enigma_laundry_token\", response.data.token)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJlbmlnbWFjYW1wIiwiZXhwIjoxNjk5NDI4MTYzLCJpYXQiOjE2OTk0MjQ1NjMsInVzZXJJZCI6IjdlODA5N2Q4LWZlZjEtNDllZC05ZjdiLWNlY2M5NTIwY2NhOCIsInJvbGUiOiJlbXBsb3llZSIsInNlcnZpY2VzIjpudWxsfQ.E_EXyr3LjXVake61dvDb2jUAUnt_d805kstKZl9GiEg",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{EMPLOYEE_USERNAME_EXISTING}}\",\n    \"password\": \"{{EMPLOYEE_PASSWORD_EXISTING}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{URL_PATH}}/auth/refresh-token",
+							"raw": "{{URL_PATH}}/auth/login",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"auth",
-								"refresh-token"
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "admin-login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = JSON.parse(responseBody)",
+									"",
+									"if (response && response.data.token) {",
+									"    pm.globals.set(\"enigma_laundry_token\", response.data.token)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{ADMIN_USERNAME}}\",\n    \"password\": \"{{ADMIN_PASSWORD}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_PATH}}/auth/login",
+							"host": [
+								"{{URL_PATH}}"
+							],
+							"path": [
+								"auth",
+								"login"
 							]
 						}
 					},
@@ -109,7 +168,7 @@
 			]
 		},
 		{
-			"name": "USER",
+			"name": "USER [ADMIN]",
 			"item": [
 				{
 					"name": "list",
@@ -154,13 +213,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/users/13a0c6f8-184c-4f5f-b308-ad749df24376",
+							"raw": "{{URL_PATH}}/users/{{USER_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"users",
-								"13a0c6f8-184c-4f5f-b308-ad749df24376"
+								"{{USER_ID}}"
 							]
 						}
 					},
@@ -182,13 +241,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/users/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"raw": "{{URL_PATH}}/users/{{USER_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"users",
-								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+								"{{USER_ID}}"
 							]
 						}
 					},
@@ -211,7 +270,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"raw": "{\n    \"id\": \"{{USER_ID}}\",\n    \"name\": \"{{USER_NAME_UPDATE}}\",\n    \"email\": \"{{USER_EMAIL_UPDATE}}\",\n    \"username\": \"{{USER_USERNAME_UPDATE}}\",\n    \"role\": \"{{USER_ROLE_UPDATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -247,7 +306,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"raw": "{\n    \"name\": \"{{USER_NAME_CREATE}}\",\n    \"email\": \"{{USER_EMAIL_CREATE}}\",\n    \"username\": \"{{USER_USERNAME_CREATE}}\",\n    \"role\": \"{{USER_ROLE_CREATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -314,13 +373,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/products/13a0c6f8-184c-4f5f-b308-ad749df24376",
+							"raw": "{{URL_PATH}}/products/{{PRODUCT_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"products",
-								"13a0c6f8-184c-4f5f-b308-ad749df24376"
+								"{{PRODUCT_ID}}"
 							]
 						}
 					},
@@ -342,13 +401,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/products/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"raw": "{{URL_PATH}}/products/{{PRODUCT_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"products",
-								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+								"{{PRODUCT_ID}}"
 							]
 						}
 					},
@@ -371,7 +430,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"raw": "{\n    \"id\": \"{{PRODUCT_ID}}\",\n    \"name\": \"{{PRODUCT_NAME_UPDATE}}\",\n    \"price\": {{PRODUCT_PRICE_UPDATE}},\n    \"type\": \"{{PRODUCT_TYPE_UPDATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -407,7 +466,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Jution Candra Kirana\",\n    \"email\": \"jutionck@enigma-laundry.com\",\n    \"username\": \"jutionck\",\n    \"role\": \"employee\"\n}",
+							"raw": "{\n    \"name\": \"{{PRODUCT_NAME_CREATE}}\",\n    \"price\": {{PRODUCT_PRICE_CREATE}},\n    \"type\": \"{{PRODUCT_TYPE_CREATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -474,13 +533,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/customers/26bc3081-4b22-4c6d-a7f4-d34d10c7ca7d",
+							"raw": "{{URL_PATH}}/customers/{{CUSTOMER_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"customers",
-								"26bc3081-4b22-4c6d-a7f4-d34d10c7ca7d"
+								"{{CUSTOMER_ID}}"
 							]
 						}
 					},
@@ -502,13 +561,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/customers/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"raw": "{{URL_PATH}}/customers/{{CUSTOMER_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"customers",
-								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+								"{{CUSTOMER_ID}}"
 							]
 						}
 					},
@@ -531,7 +590,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"ff255abc-6c22-49fa-b7e0-eaaebcfdf8a0\",\n    \"name\": \"Joko Wi\",\n    \"phoneNumber\": \"028292992\",\n    \"address\": \"Bogor\"\n}",
+							"raw": "{\n    \"id\": \"{{CUSTOMER_ID}}\",\n    \"name\": \"{{CUSTOMER_NAME_UPDATE}}\",\n    \"phoneNumber\": \"{{CUSTOMER_PHONE_UPDATE}}\",\n    \"address\": \"{{CUSTOMER_ADDRESS_UPDATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -539,13 +598,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL_PATH}}/customers/134ade96-db4e-401d-8482-6a980ed6cdb3",
+							"raw": "{{URL_PATH}}/customers",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
-								"customers",
-								"134ade96-db4e-401d-8482-6a980ed6cdb3"
+								"customers"
 							]
 						}
 					},
@@ -568,7 +626,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Joko Wi\",\n    \"phoneNumber\": \"828292992\",\n    \"address\": \"Bogor\"\n}",
+							"raw": "{\n    \"name\": \"{{CUSTOMER_NAME_CREATE}}\",\n    \"phoneNumber\": \"{{CUSTOMER_PHONE_CREATE}}\",\n    \"address\": \"{{CUSTOMER_ADDRESS_CREATE}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -615,7 +673,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"customerId\": \"b32eed7d-052a-4711-bcad-0bc577654883\",\n    \"billDetails\": [\n        {\n            \"product\": {\n                \"id\": \"58e0c367-af5e-4b9e-ae56-75f3b53a0096\"\n            },\n            \"qty\": 11\n        }\n    ]\n}",
+							"raw": "{\n    \"customerId\": \"{{CUSTOMER_ID}}\",\n    \"billDetails\": [\n        {\n            \"product\": {\n                \"id\": \"{{PRODUCT_ID}}\"\n            },\n            \"qty\": {{BILL_QTY}}\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -650,13 +708,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_PATH}}/bills/9a5d29c7-0cec-47e3-923f-3ad58fc6ab75",
+							"raw": "{{URL_PATH}}/bills/{{BILL_ID}}",
 							"host": [
 								"{{URL_PATH}}"
 							],
 							"path": [
 								"bills",
-								"9a5d29c7-0cec-47e3-923f-3ad58fc6ab75"
+								"{{BILL_ID}}"
 							]
 						}
 					},
