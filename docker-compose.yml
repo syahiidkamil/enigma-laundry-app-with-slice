@@ -1,0 +1,15 @@
+version: "3"
+services:
+  enigma-laundry-app:
+    build: .
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    env_file:
+      - .env
+    environment:
+      - PORT=${API_PORT}
+      - LOG_FILE=${LOG_FILE}
+      - TOKEN_ISSUE_NAME=${TOKEN_ISSUE_NAME}
+      - TOKEN_KEY=${TOKEN_KEY}
+      - TOKEN_LIFE_TIME=${TOKEN_LIFE_TIME}
+      - DB_NAME=${DB_NAME}
